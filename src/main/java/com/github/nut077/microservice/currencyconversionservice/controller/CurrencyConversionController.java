@@ -4,7 +4,6 @@ import com.github.nut077.microservice.currencyconversionservice.entity.CurrencyC
 import com.github.nut077.microservice.currencyconversionservice.exception.NotFoundException;
 import com.github.nut077.microservice.currencyconversionservice.service.CurrencyExchangeServiceProxy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,6 @@ import java.util.Objects;
 @RestController
 public class CurrencyConversionController {
 
-    private final Environment environment;
     private final CurrencyExchangeServiceProxy proxy;
 
     @GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
@@ -38,7 +36,7 @@ public class CurrencyConversionController {
             throw new NotFoundException("can't not find currency exchange from: " + from + " to: " + to);
         }
         CurrencyConversion currencyConversion = new CurrencyConversion(response.getId(), from, to, response.getConversionMultiple(), quantity, quantity.multiply(response.getConversionMultiple()),
-                Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port"))));
+                response.getPort());
         return ResponseEntity.ok(currencyConversion);
     }
 
@@ -50,7 +48,7 @@ public class CurrencyConversionController {
             throw new NotFoundException("can't not find currency exchange from: " + from + " to: " + to);
         }
         CurrencyConversion currencyConversion = new CurrencyConversion(response.getId(), from, to, response.getConversionMultiple(), quantity, quantity.multiply(response.getConversionMultiple()),
-                Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port"))));
+                response.getPort());
         return ResponseEntity.ok(currencyConversion);
     }
 }
