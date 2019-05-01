@@ -4,6 +4,7 @@ import com.github.nut077.microservice.currencyconversionservice.entity.CurrencyC
 import com.github.nut077.microservice.currencyconversionservice.exception.NotFoundException;
 import com.github.nut077.microservice.currencyconversionservice.service.CurrencyExchangeServiceProxy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Log4j2
 @RequiredArgsConstructor
 @RestController
 public class CurrencyConversionController {
@@ -49,6 +51,7 @@ public class CurrencyConversionController {
         }
         CurrencyConversion currencyConversion = new CurrencyConversion(response.getId(), from, to, response.getConversionMultiple(), quantity, quantity.multiply(response.getConversionMultiple()),
                 response.getPort());
+        log.info("{}", response);
         return ResponseEntity.ok(currencyConversion);
     }
 }
